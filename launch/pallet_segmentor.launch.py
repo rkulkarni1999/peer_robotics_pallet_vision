@@ -7,14 +7,14 @@ import os
 def generate_launch_description():
 
     rosbag_path = os.path.join(
-        os.getcwd,
-        "ros_dev/peer_ws/src/rosbag_package/rosbag_internship/rosbag_warehouse_data/r2b_storage/"
+        os.getcwd(),
+        "rosbags/r2b_storage/"
     )
 
     # Path to your RViz configuration file
     rviz_config_path = os.path.join(
-        os.getcwd,
-        "ros_dev/peer_ws/rviz_config/segmentation_config.rviz"  # Replace with the actual path to your .rviz2 file
+        os.getcwd(),
+        "rviz/rviz.rviz/"  
     )
 
     # Rosbag playback process
@@ -25,8 +25,8 @@ def generate_launch_description():
 
     # Segmentation node
     segmentation_node = Node(
-        package='your_package_name',  # Replace with your package name
-        executable='segmentation_node',  # Replace with your node executable name
+        package='peer_robotics_pallet_vision',
+        executable='segmentation_node', 
         name='segmentation_node',
         parameters=[{
             'rgb_topic': '/d455_1_rgb_image',
@@ -40,13 +40,32 @@ def generate_launch_description():
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
-        arguments=['-d', rviz_config_path],
+        # arguments=['-d', rviz_config_path],
         name='rviz2',
         output='screen'
     )
+    
+    # # Image view node
+    # image_view_node = Node(
+    #     package='image_view',
+    #     executable='image_view',
+    #     name='image_view',
+    #     parameters=[{
+    #         'image_transport': 'raw'
+    #     }],
+    #     arguments=[
+    #         '--width', '640', 
+    #         '--height', '640'  # Set the desired height
+    #     ],
+    #     remappings=[
+    #         ('/image', '/segmentation_inference/overlay_image')
+    #     ],
+    #     output='screen'
+    # )
 
     return LaunchDescription([
         bag_play,
         segmentation_node,
-        rviz_node
+        # image_view_node,
+        rviz_node,
     ])

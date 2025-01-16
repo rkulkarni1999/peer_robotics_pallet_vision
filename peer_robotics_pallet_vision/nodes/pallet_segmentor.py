@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
@@ -10,7 +12,7 @@ import time
 
 class SegmentationNode(Node):
     def __init__(self):
-        super().__init__('segmentation_node')
+        super().__init__('pallet_segmentor')
     
         # Parameters
         self.declare_parameter('rgb_topic', '/d455_1_rgb_image')
@@ -23,7 +25,7 @@ class SegmentationNode(Node):
         self.output_topic = self.get_parameter('output_topic').get_parameter_value().string_value
         
         # YOLO Model
-        self.model = YOLO("yolo/models/pallet_segmentation2.pt")
+        self.model = YOLO("yolo/models/pallet_segmentation.pt")
         self.bridge = CvBridge()
         
         # Subscribers
@@ -60,7 +62,6 @@ class SegmentationNode(Node):
         self.counter += 1
         # cv2.imwrite(output_path, annotated_image)
         
-
         # Log information
         # self.get_logger().info(f"Saved annotated image to {output_path}")
         
@@ -109,8 +110,10 @@ class SegmentationNode(Node):
 
 
 def main(args=None):
+    
     rclpy.init(args=args)
     node = SegmentationNode()
+    
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
