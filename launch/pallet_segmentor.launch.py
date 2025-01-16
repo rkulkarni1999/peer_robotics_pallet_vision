@@ -36,36 +36,32 @@ def generate_launch_description():
         output='screen'
     )
 
-    # RViz2 node
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        # arguments=['-d', rviz_config_path],
-        name='rviz2',
-        output='screen'
-    )
-    
-    # # Image view node
-    # image_view_node = Node(
-    #     package='image_view',
-    #     executable='image_view',
-    #     name='image_view',
-    #     parameters=[{
-    #         'image_transport': 'raw'
-    #     }],
-    #     arguments=[
-    #         '--width', '640', 
-    #         '--height', '640'  # Set the desired height
-    #     ],
-    #     remappings=[
-    #         ('/image', '/segmentation_inference/overlay_image')
-    #     ],
+    # # RViz2 node
+    # rviz_node = Node(
+    #     package='rviz2',
+    #     executable='rviz2',
+    #     arguments=['-d', rviz_config_path],
+    #     name='rviz2',
     #     output='screen'
     # )
+    
+    # Image view node
+    image_view_node = Node(
+        package='image_view',
+        executable='image_view',
+        name='image_view',
+        parameters=[{
+            'image_transport': 'raw'
+        }],
+        remappings=[
+            ('/image', '/segmentation_inference/overlay_image')
+        ],
+        output='screen'
+    )
 
     return LaunchDescription([
         bag_play,
         segmentation_node,
-        # image_view_node,
-        rviz_node,
+        image_view_node,
+        # rviz_node,
     ])
