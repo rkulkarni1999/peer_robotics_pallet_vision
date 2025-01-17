@@ -11,6 +11,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch', ['launch/pallet_segmentor.launch.py']),
+        ('share/' + package_name + '/launch', ['launch/pallet_detector.launch.py']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -22,6 +23,9 @@ setup(
     entry_points={
         'console_scripts': [
             'segmentation_node = peer_robotics_pallet_vision.nodes.pallet_segmentor:main',
+            'detection_node = peer_robotics_pallet_vision.nodes.pallet_detector:main',
+            'detection_display_node = peer_robotics_pallet_vision.nodes.display_detection:main', 
+            'segmentation_display_node = peer_robotics_pallet_vision.nodes.display_segmentation:main',
         ],
     },
 )

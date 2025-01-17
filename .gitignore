@@ -1,4 +1,7 @@
 rosbags/
-yolo/models/backup
+yolo/models/
+yolo/inferences/
+runs/
 outputs/
-
+datasets/
+data/

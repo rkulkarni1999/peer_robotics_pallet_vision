@@ -25,7 +25,7 @@ class SegmentationNode(Node):
         self.output_topic = self.get_parameter('output_topic').get_parameter_value().string_value
         
         # YOLO Model
-        self.model = YOLO("yolo/models/pallet_segmentation.pt")
+        self.model = YOLO("yolo/models/final/pallet_segmentation.pt")
         self.bridge = CvBridge()
         
         # Subscribers
@@ -55,15 +55,6 @@ class SegmentationNode(Node):
         annotated_msg = self.bridge.cv2_to_imgmsg(annotated_image, encoding="bgr8")
         self.image_pub.publish(annotated_msg)
         
-        # Save the annotated image
-        output_dir = "outputs/annotated_segmentation_images"  # Specify your output directory
-        os.makedirs(output_dir, exist_ok=True)
-        output_path = os.path.join(output_dir, f"seg_annotated_{self.counter}.jpg")
-        self.counter += 1
-        # cv2.imwrite(output_path, annotated_image)
-        
-        # Log information
-        # self.get_logger().info(f"Saved annotated image to {output_path}")
         
     def process_results(self, image, results):
         # Initialize a semantic mask for each class

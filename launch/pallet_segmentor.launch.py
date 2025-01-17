@@ -36,32 +36,19 @@ def generate_launch_description():
         output='screen'
     )
 
-    # # RViz2 node
-    # rviz_node = Node(
-    #     package='rviz2',
-    #     executable='rviz2',
-    #     arguments=['-d', rviz_config_path],
-    #     name='rviz2',
-    #     output='screen'
-    # )
-    
-    # Image view node
-    image_view_node = Node(
-        package='image_view',
-        executable='image_view',
-        name='image_view',
-        parameters=[{
-            'image_transport': 'raw'
-        }],
-        remappings=[
-            ('/image', '/segmentation_inference/overlay_image')
-        ],
-        output='screen'
+    # display node
+    segmentation_display_node = Node(
+        package='peer_robotics_pallet_vision',
+        executable='segmentation_display_node',
+        name='segmentation_display_node',
+        parameters=[
+                {'input_topic': '/segmentation_inference/overlay_image'}  # Input topic parameter
+            ],
+            output='screen',
     )
 
     return LaunchDescription([
         bag_play,
         segmentation_node,
-        image_view_node,
-        # rviz_node,
+        segmentation_display_node,
     ])
