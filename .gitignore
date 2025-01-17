@@ -5,3 +5,6 @@ runs/
 outputs/
 datasets/
 data/
+yolo11n.onnx
+yolo11n.pt
+

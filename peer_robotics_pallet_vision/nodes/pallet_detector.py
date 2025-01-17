@@ -7,56 +7,64 @@ from cv_bridge import CvBridge
 import cv2
 from ultralytics import YOLO
 import numpy as np
+from rclpy.qos import QoSProfile, ReliabilityPolicy
 
 class DetectionNode(Node):
     def __init__(self):
         super().__init__('pallet_detector')
 
         # Parameters
-        self.declare_parameter('rgb_topic', '/d455_1_rgb_image')
+        self.declare_parameter('rgb_topic', '/robot1/zed2i/left/image_rect_color')
+        self.declare_parameter('depth_topic', '/d455_1_depth_image')
         self.declare_parameter('output_topic', '/detection_inference/overlay_image')
 
         # Get parameters
         self.rgb_topic = self.get_parameter('rgb_topic').get_parameter_value().string_value
+        self.depth_topic = self.get_parameter('depth_topic').get_parameter_value().string_value
         self.output_topic = self.get_parameter('output_topic').get_parameter_value().string_value
 
         # YOLO Model
-        self.model = YOLO("yolo/models/final/pallet_detector_1_200.pt")
+        self.model = YOLO("yolo/models/final/detection/detection_final.pt")
         self.bridge = CvBridge()
 
-        # Subscriber
-        self.rgb_sub = self.create_subscription(Image, self.rgb_topic, self.rgb_callback, 10)
+        qos_profile = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,  # Use BEST_EFFORT to match most sensor topics
+            depth=10
+        )
 
-        # Publisher
-        self.image_pub = self.create_publisher(Image, self.output_topic, 10)
+        self.rgb_sub = self.create_subscription(Image, self.rgb_topic, self.rgb_callback, qos_profile)
+        self.depth_sub = self.create_subscription(Image, self.depth_topic, self.depth_callback, qos_profile)
+        
+        self.image_pub = self.create_publisher(Image, self.output_topic, qos_profile)
+        
+        self.latest_depth = None
 
+    def depth_callback(self, msg):
+        
+        self.latest_depth = self.bridge.imgmsg_to_cv2(msg, desired_encoding="passthrough")
+    
     def rgb_callback(self, msg):
-        # Convert ROS image message to OpenCV image
+        
         cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
 
-        # Perform detection
-        results = self.model.predict(source=cv_image, conf=0.5, save=False)
+        results = self.model.predict(source=cv_image, conf=0.55, save=False)
         annotated_image = self.process_results(cv_image, results)
 
-        # Publish the annotated image
         annotated_msg = self.bridge.cv2_to_imgmsg(annotated_image, encoding="bgr8")
         self.image_pub.publish(annotated_msg)
 
     def process_results(self, image, results):
-        # Draw bounding boxes and labels on the image
+
         for result in results[0].boxes.data:
-            box = result[:4].cpu().numpy().astype(int)  # Bounding box coordinates (x1, y1, x2, y2)
-            score = result[4].cpu().item()             # Confidence score
-            cls_id = int(result[5].cpu().item())       # Class ID
+            box = result[:4].cpu().numpy().astype(int)  
+            score = result[4].cpu().item()             
+            cls_id = int(result[5].cpu().item())       
 
-            # Define label and color
             label = f"{self.model.names[cls_id]}: {score:.2f}"
-            color = (0, 255, 0) if cls_id == 0 else (0, 0, 255)  # Class-based color
+            color = (0, 255, 0) if cls_id == 0 else (0, 0, 255)  
 
-            # Draw bounding box
             cv2.rectangle(image, (box[0], box[1]), (box[2], box[3]), color, 2)
 
-            # Draw label
             cv2.putText(
                 image,
                 label,

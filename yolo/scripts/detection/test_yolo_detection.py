@@ -1,29 +1,51 @@
-from ultralytics import YOLO
+import argparse
 import os
+from ultralytics import YOLO
 
-# Load a pretrained YOLO model
-# model = YOLO("yolo/models/best_1_200.pt")  # detection model
-# model = YOLO("yolo/models/best_2_150.pt")  # detection model
-# model = YOLO("yolo/models/best.pt")  # detection model
-# model = YOLO("yolo/models/yolo11n.pt")  # detection model
+def main(args):
 
-# model = YOLO("yolo/models/final/pallet_detector_1_150.pt").to("cuda:0")
-model = YOLO("yolo/models/final/pallet_detector_1_200.pt").to("cuda:0")
+    model = YOLO(args.model_path).to("cuda:0")
 
+    image_files = [f for f in os.listdir(args.image_dir) if f.endswith(('.jpg', '.png', '.jpeg'))]
+    image_files.sort()  # Sort files for consistent order
+    image_files = image_files[:args.limit]  # Limit the number of images processed
 
-# Directory containing images
-# image_dir = "data/images/Pallets_10"
-image_dir = "data/warehouse_data"
+    for idx, image_file in enumerate(image_files):
+        image_path = os.path.join(args.image_dir, image_file)
+        model.predict(source=image_path, save=True, conf=args.confidence)
 
-# Get a list of image files in the directory
-image_files = [f for f in os.listdir(image_dir) if f.endswith(('.jpg', '.png', '.jpeg'))]
-image_files.sort()  
-image_files = image_files  # Limit to the first 10 images
+if __name__ == "__main__":
 
-# Perform inference on each image
-for idx, image_file in enumerate(image_files):
+    parser = argparse.ArgumentParser(description="YOLO Inference Script")
     
-    image_path = os.path.join(image_dir, image_file)
-    model.predict(source=image_path, save=True, conf=0.2)
-
-print("Processing complete!")
+    parser.add_argument(
+        "--model_path",
+        type=str,
+        default="yolo/models/final/detection/detection_final.pt",
+        help="Path to the YOLO model file."
+    )
+    parser.add_argument(
+        "--image_dir",
+        type=str,
+        default="data/warehouse_youtube",
+        help="Path to the directory containing the images."
+    )
+    
+    # Confidence threshold
+    parser.add_argument(
+        "--confidence",
+        type=float,
+        default=0.55,
+        help="Confidence threshold for YOLO detection."
+    )
+    
+    # Limit the number of images to process
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Limit the number of images to process. Set to None for all images."
+    )
+    
+    args = parser.parse_args()
+    main(args)
