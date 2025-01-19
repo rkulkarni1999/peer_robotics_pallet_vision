@@ -218,8 +218,6 @@ dependencies:
       - argcomplete==3.5.3
       - asgiref==3.8.1
       - attr==0.3.1
-      - autodistill==0.1.29
-      - autodistill-grounding-dino==0.1.4
       - autodistill-yolov11==0.1.4
       - azure-core==1.32.0
       - azure-storage-blob==12.24.0
@@ -308,7 +306,6 @@ dependencies:
       - regex==2024.11.6
       - requests-mock==1.12.1
       - requests-toolbelt==1.0.0
-      - rf-groundingdino==0.1.2
       - rf-segment-anything==1.0
       - roboflow==1.1.50
       - rq==1.10.1

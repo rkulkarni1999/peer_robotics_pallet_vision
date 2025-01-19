@@ -17,17 +17,14 @@ class SegmentationNode(Node):
     def __init__(self):
         super().__init__('pallet_segmentor')
     
-        # Parameters
         self.declare_parameter('rgb_topic', '/robot1/zed2i/left/image_rect_color')
         self.declare_parameter('depth_topic', '/d455_1_depth_image')
         self.declare_parameter('output_topic', '/segmentation_inference/overlay_image')
         
-         # Get parameters
         self.rgb_topic = self.get_parameter('rgb_topic').get_parameter_value().string_value
         self.depth_topic = self.get_parameter('depth_topic').get_parameter_value().string_value
         self.output_topic = self.get_parameter('output_topic').get_parameter_value().string_value
         
-        # YOLO Model
         self.model = YOLO("yolo/models/final/segmentation/segmentation_final.pt")
         self.bridge = CvBridge()
         
@@ -36,7 +33,6 @@ class SegmentationNode(Node):
             depth=10
         )
         
-        # Subscribers
         self.rgb_sub = self.create_subscription(Image, self.rgb_topic, self.rgb_callback, qos_profile)
         self.depth_sub = self.create_subscription(Image, self.depth_topic, self.depth_callback, qos_profile)
         
@@ -54,7 +50,7 @@ class SegmentationNode(Node):
         
         cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
         
-        results = self.model.predict(source=cv_image, conf=0.4, save=False)
+        results = self.model.predict(source=cv_image, conf=0.60, save=False)
         annotated_image = self.process_results(cv_image, results)
      
         annotated_msg = self.bridge.cv2_to_imgmsg(annotated_image, encoding="bgr8")

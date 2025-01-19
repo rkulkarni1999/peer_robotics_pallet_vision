@@ -11,13 +11,11 @@ class DisplayNode(Node):
     def __init__(self):
         super().__init__('detection_display_node')
 
-        # Parameters
         self.declare_parameter('input_topic', '/detection_inference/overlay_image')
 
         # Get parameter
         self.input_topic = self.get_parameter('input_topic').get_parameter_value().string_value
 
-        # CVBridge for image conversion
         self.bridge = CvBridge()
 
         qos_profile = QoSProfile(
@@ -25,7 +23,6 @@ class DisplayNode(Node):
             depth=10
         )
         
-        # Subscriber
         self.image_sub = self.create_subscription(Image, self.input_topic, self.image_callback, qos_profile)
 
     def image_callback(self, msg):
@@ -40,9 +37,9 @@ class DisplayNode(Node):
             aspect_ratio = original_width / original_height
 
             # Define new width or height while maintaining aspect ratio
-            target_width = 480  # Example target width
-            target_height = int(target_width / aspect_ratio)  # Compute height to preserve aspect ratio
-
+            target_width = 1080
+            target_height = int(target_width / aspect_ratio)
+            
             # Resize the image
             resized_image = cv2.resize(cv_image, (target_width, target_height), interpolation=cv2.INTER_AREA)
 
@@ -53,7 +50,7 @@ class DisplayNode(Node):
             key = cv2.waitKey(1)
 
             # Optional: Add a key press to exit (e.g., ESC key)
-            if key == 27:  # ESC key
+            if key == 27: 
                 self.get_logger().info('Exiting the display node.')
                 rclpy.shutdown()
                 cv2.destroyAllWindows()

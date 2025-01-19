@@ -23,14 +23,15 @@ def generate_launch_description():
     
     rosbag_arg = DeclareLaunchArgument(
         'rosbag',
-        default_value='False',  # Default is not to play the rosbag
+        default_value='False', 
         description='Set to True to play the rosbag'
     )
 
     # Paths
     rosbag_path = os.path.join(
         os.getcwd(),
-        "rosbags/internship_assignment_sample_bag"
+        # "rosbags/internship_assignment_sample_bag"
+        "rosbags/r2b_storage"
     )
 
     rviz_config_path = os.path.join(
