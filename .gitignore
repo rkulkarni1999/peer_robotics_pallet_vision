@@ -1,5 +1,4 @@
 rosbags/
-yolo/models/
 yolo/inferences/
 runs/
 outputs/
