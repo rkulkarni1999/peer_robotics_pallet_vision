@@ -1,4 +1,5 @@
-rosbags/
+rosbags/internship_assignment_sample_bag
+rosbags/r2b_storage
 yolo/inferences/
 runs/
 outputs/
