@@ -49,8 +49,8 @@ def generate_launch_description():
     # Segmentation node
     segmentation_node = Node(
         package='peer_robotics_pallet_vision',
-        executable='segmentation_node', 
-        name='segmentation_node',
+        executable='pallet_segmentor', 
+        name='pallet_segmentor',
         parameters=[
             {'rgb_topic': LaunchConfiguration('rgb_topic')},
             {'depth_topic': LaunchConfiguration('depth_topic')},

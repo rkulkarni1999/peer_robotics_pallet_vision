@@ -48,8 +48,8 @@ def generate_launch_description():
     # detection node
     detection_node = Node(
         package='peer_robotics_pallet_vision',
-        executable='detection_node', 
-        name='detection_node',
+        executable='pallet_detector', 
+        name='pallet_detector',
         parameters=[
             {'rgb_topic': LaunchConfiguration('rgb_topic')},
             {'depth_topic': LaunchConfiguration('depth_topic')},

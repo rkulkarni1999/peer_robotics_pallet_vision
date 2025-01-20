@@ -27,5 +27,5 @@ setup(
             'pallet_segmentor = peer_robotics_pallet_vision.pallet_segmentor:main', 
             'segmentation_display_node = peer_robotics_pallet_vision.display_segmentation:main',
         ],
-    },
+    }, 
 )
