@@ -30,8 +30,8 @@ Solution for pallet detection and pallet-ground segmentation in a manufacturing 
 - [x] **Semantic Segmentation Model**: Fine-tuned YOLOv11-seg for pallet-ground segmentation. 
 - [x] **Training**: Trained using the recommended dataset. Trained using full (FP32) and half (FP16) precision.
 - [x] **Performance Metrics**: Evaluated models using:
-  - **mAP** for object detection : ___
-  - **IoU** for semantic segmentation : ___
+  - **mAP** for object detection.
+  - **IoU** for semantic segmentation.
 ---
 
 ### **3. ROS 2 Node Development**
