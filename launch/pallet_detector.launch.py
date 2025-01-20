@@ -29,8 +29,8 @@ def generate_launch_description():
     # Paths
     rosbag_path = os.path.join(
         os.getcwd(),
-        # "rosbags/internship_assignment_sample_bag/"
-        "rosbags/r2b_storage/"
+        "rosbags/internship_assignment_sample_bag/"
+        # "rosbags/r2b_storage/"
     )
 
     rviz_config_path = os.path.join(
