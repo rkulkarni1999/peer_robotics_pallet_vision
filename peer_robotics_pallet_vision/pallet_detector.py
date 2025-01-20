@@ -24,8 +24,8 @@ class DetectionNode(Node):
         self.output_topic = self.get_parameter('output_topic').get_parameter_value().string_value
 
         # YOLO Model
-        # self.model = YOLO("yolo/models/final/detection/detection_final.pt")
-        self.model = YOLO("yolo/models/final/optimized_models_detection/optimized_detection.onnx")
+        self.model = YOLO("yolo/models/final/detection/detection_final.pt")
+        # self.model = YOLO("yolo/models/final/optimized_models_detection/optimized_detection.onnx")
         
         self.bridge = CvBridge()
 

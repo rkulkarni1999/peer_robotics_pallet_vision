@@ -20,3 +20,8 @@
     <build_type>ament_python</build_type>
   </export>
 </package>
+
+
+<!-- conda activate yolo
+export PYTHONPATH=$(python3 -c "import site; print(site.getsitepackages()[0])"):$PYTHONPATH
+export PATH=$(python3 -c "import sys; print(':'.join(sys.path))"):$PATH -->

@@ -11,7 +11,8 @@ chmod +x setup_env.sh
 
 conda activate yolo_env
 
-
+export PYTHONPATH=$(python3 -c "import site; print(site.getsitepackages()[0])"):$PYTHONPATH
+export PATH=$(python3 -c "import sys; print(':'.join(sys.path))"):$PATH
 ```
 
 - Navigate back to your <ros2ws>  
