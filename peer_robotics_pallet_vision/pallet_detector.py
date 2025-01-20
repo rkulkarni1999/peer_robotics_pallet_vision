@@ -25,7 +25,6 @@ class DetectionNode(Node):
 
         # YOLO Model
         self.model = YOLO("yolo/models/final/detection/detection_final.pt")
-        # self.model = YOLO("yolo/models/final/optimized_models_detection/optimized_detection.onnx")
         
         self.bridge = CvBridge()
 

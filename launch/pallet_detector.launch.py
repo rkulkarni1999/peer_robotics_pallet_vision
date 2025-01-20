@@ -10,13 +10,13 @@ def generate_launch_description():
     # Arguments
     rgb_topic_arg = DeclareLaunchArgument(
         'rgb_topic',
-        default_value='/robot1/zed2i/left/image_rect_color',  # Default RGB topic
+        default_value='/robot1/zed2i/left/image_rect_color',  
         description='Input RGB topic for the detection node'
     )
 
     depth_topic_arg = DeclareLaunchArgument(
         'depth_topic',
-        default_value='/d455_1_depth_image',  # Default Depth topic
+        default_value='/d455_1_depth_image', 
         description='Input Depth topic for the detection node'
     )
     
