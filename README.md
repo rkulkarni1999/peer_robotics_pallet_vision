@@ -202,8 +202,8 @@ Solution for pallet detection and pallet-ground segmentation in a manufacturing 
 
 - **Published Topics**:
   
-  - '/segmentation_inference/overlay_image' (sensor_msgs/Image with bounding boxes)
-  - '/detection_inference/overlay_image' (sensor_msgs/Image with segmented regions)
+  - `/segmentation_inference/overlay_image` (sensor_msgs/Image with bounding boxes)
+  - `/detection_inference/overlay_image` (sensor_msgs/Image with segmented regions)
 
 ### Visualization
 
