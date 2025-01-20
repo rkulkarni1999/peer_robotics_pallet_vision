@@ -1,7 +1,6 @@
 {
     "python.autoComplete.extraPaths": [
-        "/home/pear_group/ros_dev/peer_ws/build/peer_robotics_pallet_vision",
-        "/home/pear_group/ros_dev/peer_ws/install/peer_robotics_pallet_vision/lib/python3.10/site-packages",
+        "/home/pear_group/rutwik/ros_dev_test/ros2_ws/install/peer_robotics_pallet_vision/lib/python3.10/site-packages",
         "/home/pear_group/ros_dev/project4/install/turtlebot3_msgs/lib/python3.10/site-packages",
         "/home/pear_group/ros_dev/ros2_ws/build/turtlebot3_teleop",
         "/home/pear_group/ros_dev/ros2_ws/install/turtlebot3_teleop/lib/python3.10/site-packages",
@@ -15,8 +14,7 @@
         "/opt/ros/humble/local/lib/python3.10/dist-packages"
     ],
     "python.analysis.extraPaths": [
-        "/home/pear_group/ros_dev/peer_ws/build/peer_robotics_pallet_vision",
-        "/home/pear_group/ros_dev/peer_ws/install/peer_robotics_pallet_vision/lib/python3.10/site-packages",
+        "/home/pear_group/rutwik/ros_dev_test/ros2_ws/install/peer_robotics_pallet_vision/lib/python3.10/site-packages",
         "/home/pear_group/ros_dev/project4/install/turtlebot3_msgs/lib/python3.10/site-packages",
         "/home/pear_group/ros_dev/ros2_ws/build/turtlebot3_teleop",
         "/home/pear_group/ros_dev/ros2_ws/install/turtlebot3_teleop/lib/python3.10/site-packages",
@@ -28,6 +26,5 @@
         "/home/pear_group/ros_dev/DRL-Robot-Navigation-ROS2/install/turtlebot3_msgs/lib/python3.10/site-packages",
         "/opt/ros/humble/lib/python3.10/site-packages",
         "/opt/ros/humble/local/lib/python3.10/dist-packages"
-    ],
-    "ros.distro": "humble"
+    ]
 }

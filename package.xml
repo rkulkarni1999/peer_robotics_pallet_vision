@@ -1,27 +1,16 @@
 <?xml version="1.0"?>
-<package format="2">
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>peer_robotics_pallet_vision</name>
-  <version>0.1.0</version>
-  <description>Pallet Detection and Segmentation</description>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="you@example.com">pear_group</maintainer>
+  <license>Apache-2.0</license>
 
-  <maintainer email="rkulkarni1@wpi.edu">Rutwik Kulkarni</maintainer>
-  <license>Apache License 2.0</license>
-
-  <!-- Build tool dependencies -->
-  <buildtool_depend>ament_cmake</buildtool_depend>
-  <buildtool_depend>ament_python</buildtool_depend>
-
-  <!-- Runtime dependencies -->
-  <exec_depend>rclpy</exec_depend>
-  <exec_depend>sensor_msgs</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
-  <exec_depend>opencv-python</exec_depend>
-  <exec_depend>numpy</exec_depend>
-  <exec_depend>pytest</exec_depend>
-  
-  <!-- Optional dependencies -->
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
 
   <export>
     <build_type>ament_python</build_type>

@@ -4,7 +4,7 @@ package_name = 'peer_robotics_pallet_vision'
 
 setup(
     name=package_name,
-    version='0.1.0',
+    version='0.0.0',
     packages=find_packages(exclude=['test']),
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -15,10 +15,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='rutwik_kulkarni',
+    maintainer='Rutwik Kulkarni',
     maintainer_email='rkulkarni1@wpi.edu',
     description='Pallet Detection and Segmentation',
-    license='Apache License 2.0',
+    license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
