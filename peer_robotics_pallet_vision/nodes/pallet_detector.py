@@ -24,11 +24,13 @@ class DetectionNode(Node):
         self.output_topic = self.get_parameter('output_topic').get_parameter_value().string_value
 
         # YOLO Model
-        self.model = YOLO("yolo/models/final/detection/detection_final.pt")
+        # self.model = YOLO("yolo/models/final/detection/detection_final.pt")
+        self.model = YOLO("yolo/models/final/optimized_models_detection/optimized_detection.onnx")
+        
         self.bridge = CvBridge()
 
         qos_profile = QoSProfile(
-            reliability=ReliabilityPolicy.BEST_EFFORT,  # Use BEST_EFFORT to match most sensor topics
+            reliability=ReliabilityPolicy.BEST_EFFORT,  
             depth=10
         )
 

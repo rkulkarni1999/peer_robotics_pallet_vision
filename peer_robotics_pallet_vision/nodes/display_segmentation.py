@@ -37,7 +37,7 @@ class DisplayNode(Node):
             original_height, original_width = cv_image.shape[:2]
             aspect_ratio = original_width / original_height
             target_width = 480
-            target_height = int(target_width / aspect_ratio)  # Compute height to preserve aspect ratio
+            target_height = int(target_width / aspect_ratio)  
 
             resized_image = cv2.resize(cv_image, (target_width, target_height), interpolation=cv2.INTER_AREA)
 

@@ -26,6 +26,8 @@ class SegmentationNode(Node):
         self.output_topic = self.get_parameter('output_topic').get_parameter_value().string_value
         
         self.model = YOLO("yolo/models/final/segmentation/segmentation_final.pt")
+        # self.model = YOLO("yolo/models/final/segmentation/segmentation_final.pt")
+
         self.bridge = CvBridge()
         
         qos_profile = QoSProfile(

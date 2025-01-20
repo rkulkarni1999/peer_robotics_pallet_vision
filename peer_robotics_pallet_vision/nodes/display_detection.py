@@ -37,7 +37,7 @@ class DisplayNode(Node):
             aspect_ratio = original_width / original_height
 
             # Define new width or height while maintaining aspect ratio
-            target_width = 1080
+            target_width = 480
             target_height = int(target_width / aspect_ratio)
             
             # Resize the image

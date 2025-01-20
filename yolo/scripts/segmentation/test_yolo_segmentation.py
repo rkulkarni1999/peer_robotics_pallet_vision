@@ -1,20 +1,8 @@
 import os
+import argparse
 import numpy as np
 import cv2
 from ultralytics import YOLO
-
-# Load the YOLO segmentation model
-model = YOLO("yolo/models/final/segmentation/segmentation_final.pt")  # Replace with your best model
-model = model.to("cuda:0")
-
-# Directory containing images
-image_dir = "data/warehouse_data"
-image_dir = "data/warehouse_youtube"
-
-output_dir_semantic = "yolo/inferences/segmentation/yolo_semantic_segmentation/"
-
-# Ensure output directory exists
-os.makedirs(output_dir_semantic, exist_ok=True)
 
 # Define process_results function
 def process_results(image, results):
@@ -61,29 +49,67 @@ def process_results(image, results):
                 )
     return image
 
-# Get a list of image files in the directory
-image_files = [f for f in os.listdir(image_dir) if f.endswith(('.jpg', '.png', '.jpeg'))]
-image_files.sort()  # Optional: sort files alphabetically
+def main(args):
+    # Load the YOLO segmentation model
+    model = YOLO(args.model_path)
+    model = model.to("cuda:0")
 
-# Perform segmentation on each image
-for idx, image_file in enumerate(image_files):
-    image_path = os.path.join(image_dir, image_file)
-    
-    # Predict segmentation
-    results = model.predict(source=image_path, conf=0.4, save=False)
-    
-    # Read the original image
-    original_image = cv2.imread(image_path)
-    original_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
+    # Ensure output directory exists
+    os.makedirs(args.output_dir, exist_ok=True)
 
-    # Process results to create semantic segmentation overlay
-    semantic_result = process_results(original_image, results)
+    # Get a list of image files in the directory
+    image_files = [f for f in os.listdir(args.image_dir) if f.endswith(('.jpg', '.png', '.jpeg'))]
+    image_files.sort()  # Optional: sort files alphabetically
 
-    # Save semantic overlay
-    semantic_output_path = os.path.join(output_dir_semantic, os.path.splitext(image_file)[0] + "_semantic.png")
-    semantic_result_bgr = cv2.cvtColor(semantic_result, cv2.COLOR_RGB2BGR)  # Convert back to BGR
-    cv2.imwrite(semantic_output_path, semantic_result_bgr)
+    # Perform segmentation on each image
+    for idx, image_file in enumerate(image_files):
+        image_path = os.path.join(args.image_dir, image_file)
 
-    print(f"Processed and saved: {semantic_output_path}")
+        # Predict segmentation
+        results = model.predict(source=image_path, conf=args.confidence, save=False)
 
-print("Semantic segmentation complete!")
+        # Read the original image
+        original_image = cv2.imread(image_path)
+        original_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
+
+        # Process results to create semantic segmentation overlay
+        semantic_result = process_results(original_image, results)
+
+        # Save semantic overlay
+        semantic_output_path = os.path.join(args.output_dir, os.path.splitext(image_file)[0] + "_semantic.png")
+        semantic_result_bgr = cv2.cvtColor(semantic_result, cv2.COLOR_RGB2BGR)  # Convert back to BGR
+        cv2.imwrite(semantic_output_path, semantic_result_bgr)
+
+        print(f"Processed and saved: {semantic_output_path}")
+
+    print("Semantic segmentation complete!")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Semantic Segmentation using YOLOv8")
+    parser.add_argument(
+        "--model_path",
+        type=str,
+        default="yolo/models/final/segmentation/segmentation_final.pt",
+        help="Path to the YOLO segmentation model",
+    )
+    parser.add_argument(
+        "--image_dir",
+        type=str,
+        default="data/warehouse_data",
+        help="Directory containing input images",
+    )
+    parser.add_argument(
+        "--output_dir",
+        type=str,
+        default="yolo/inferences/segmentation/yolo_semantic_segmentation/",
+        help="Directory to save the segmentation results",
+    )
+    parser.add_argument(
+        "--confidence",
+        type=float,
+        default=0.55,
+        help="Confidence threshold for YOLO predictions",
+    )
+    args = parser.parse_args()
+
+    main(args)
