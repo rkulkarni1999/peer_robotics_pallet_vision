@@ -1,3 +1,5 @@
+# Command for setting up the environment to run package
+
 ```bash
 mkdir -p <ros2_ws>/src && cd <ros2_ws>/src  
 
@@ -11,11 +13,8 @@ chmod +x setup_env.sh
 
 conda activate yolo_env
 
-```
+# Navigate back to your <ros2ws>  
 
-- Navigate back to your <ros2ws>  
-
-```bash
 source install/setup.bash
 
 export PYTHONPATH=$(python3 -c "import site; print(site.getsitepackages()[0])"):$PYTHONPATH
@@ -25,6 +24,3 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 cd src/peer_robotics_pallet_vision/
 ```
 
-```bash
-
-```

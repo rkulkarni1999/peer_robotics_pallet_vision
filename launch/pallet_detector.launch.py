@@ -30,7 +30,7 @@ def generate_launch_description():
     rosbag_path = os.path.join(
         os.getcwd(),
         "rosbags/internship_assignment_sample_bag/"
-        # "rosbags/r2b_storage/"
+        # "rosbags/r2b_storage/" # UNCOMMENT FOR WAREHOUSE DATA TEST
     )
 
     rviz_config_path = os.path.join(
@@ -63,7 +63,7 @@ def generate_launch_description():
         executable='detection_display_node',
         name='detection_display_node',
         parameters=[
-                {'input_topic': '/detection_inference/overlay_image'}  # Input topic parameter
+                {'input_topic': '/detection_inference/overlay_image'} 
             ],
             output='screen',
     )

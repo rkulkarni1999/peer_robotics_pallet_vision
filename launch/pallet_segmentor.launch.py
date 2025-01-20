@@ -11,7 +11,7 @@ def generate_launch_description():
     # Args
     rgb_topic_arg = DeclareLaunchArgument(
         'rgb_topic',
-        default_value='/robot1/zed2i/left/image_rect_color',  # Default RGB topic
+        default_value='/robot1/zed2i/left/image_rect_color',  
         description='Input RGB topic for the detection node'
     )
 

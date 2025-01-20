@@ -19,7 +19,7 @@ Solution for pallet detection and pallet-ground segmentation in a manufacturing 
 ## Summary
 ### **1. Dataset Acquisition and Preparation**
 - [x] **Dataset**: Used the recommended dataset (as per assignment).
-- [x] **Annotation**: Initially used Grounded SAM, but switched to manual annotation for 100 images. Fine-tuned YOLOv11 to annotate the rest.
+- [x] **Annotation**: Initially used Grounded SAM (Grounding Dino + SAM), but switched to manual annotation for 100 images. Fine-tuned YOLOv11 to annotate the rest.
 - [x] **Organization**: Organized in YOLOv11 format with train, validation, and test splits.
 - [x] **Augmentation**: Applied techniques like flipping, rotation, Gaussian noise, blur, shear, grayscale, and saturation adjustments.
 
@@ -30,8 +30,8 @@ Solution for pallet detection and pallet-ground segmentation in a manufacturing 
 - [x] **Semantic Segmentation Model**: Fine-tuned YOLOv11-seg for pallet-ground segmentation. 
 - [x] **Training**: Trained using the recommended dataset. Trained using full (FP32) and half (FP16) precision.
 - [x] **Performance Metrics**: Evaluated models using:
-  - **mAP** for object detection.
-  - **IoU** for semantic segmentation.
+  - **mAP** for object detection : ___
+  - **IoU** for semantic segmentation : ___
 ---
 
 ### **3. ROS 2 Node Development**
@@ -52,11 +52,11 @@ Solution for pallet detection and pallet-ground segmentation in a manufacturing 
 ---
 
 ### **5. Dockerized Deployment**
-- [ ] **Dockerization**: Coming soon... 
+- [X]  **Docker** : Docker File and installation instructions available for ease of usability.  
 ---
 
 ### **6. Evaluation Criteria**
-- [x] **Live Camera Feed**: Full integration and testing with ros2 bags obtained from real warehouse [Link] the ZED 2i camera feed provided in the assignment. 
+- [x] **Live Camera Feed**: Full integration and testing with ros2 bags obtained from real warehouse [r2b dataset](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/isaac/resources/r2bdataset2023) the ZED 2i camera feed provided in the assignment. 
 
 - [x] **Detection Accuracy**: Initial testing performed; detection accuracy under varying conditions to be further evaluated.
 
@@ -67,11 +67,10 @@ Solution for pallet detection and pallet-ground segmentation in a manufacturing 
 ## Table of Contents
 1. [Dataset Preparation](#dataset-preparation)
 2. [Model Development](#model-development)
+3. [Results](#results)
 3. [ROS 2 Node Development](#ros-2-node-development)
+5. [How to Run](#environment-setup)
 4. [Edge Deployment Optimization](#edge-deployment-optimization)
-5. [How to Run](#how-to-run)
-6. [Results and Evaluation](#results-and-evaluation)
-7. [Future Work](#future-work)
 
 ---
 
@@ -116,35 +115,42 @@ Solution for pallet detection and pallet-ground segmentation in a manufacturing 
   
 - **Performance Metrics**:
   - For FP32 model: 
-    - mAP (on test set): 
-      - Final mAP@50: 0.801
-      - Final mAP@50:95: 0.575
-    - Inference Speed: 3.4 ms
+    - mAP50: 0.7929262822118579
+    - mAP50-95: 0.5674033615455085
+    - Precision: 0.81439
+    - Recall: 0.70399
+    - Inference Speed: 4.2 ms
   
-  - For Optimized model (trained FP16, then Quantized to Int8): 
+  - For Optimized model (trained FP16, then Quantized to INT8): 
 
-    - Inference Speed: 2.04 ms
+    - Inference Speed: 2.45 ms
+
+  **Note**: These are evaluated on a 3080Ti Laptop GPU (TODO: Update Specs ). 
 
 ### Semantic Segmentation
 
 - **Model**: YOLOv11 nano seg.
 
-- **Training Framework**: PyTorch (trained in FP32 precision).
+- **Training Framework**: PyTorch (trained in FP32 and FP16 precision).
 
-  - **Losses, Mean Average Precision (MAP), Precision and Recall**
+- **Losses, Mean Average Precision (MAP), Precision and Recall**
 
 ![Training and Validation Losses](videos/images/segment_train_plot.png)
 
 - **Performance Metrics**:
-- mAP
-  - IOU: 0.78
-  - Inference Speed: 4.2 ms 
+  - mIoU (0.50-0.95): 0.7668
+  - mIoU (0.50): 0.9546
+  - Mean Precision: 0.9239
+  - Mean Recall: 0.9240 
 
-### Results
+{TODO}
+- **For Optimized Model** (Trained on FP32, then quantized to INT8)
+  - Inference Speed: __ ms  
 
-#### Inference on Test Set
+---
+## Results
 
-#### Real World Deployment
+### Real World Deployment
 
 - Feed from RealSense D455
   - Detection (Pallets)
@@ -171,6 +177,7 @@ Solution for pallet detection and pallet-ground segmentation in a manufacturing 
 ## ROS 2 Node Development
 
 ### ROS 2 Package
+
 - Developed using ROS 2 Humble.
 
 - Package Name: `peer_robotics_pallet_vision`
@@ -195,10 +202,11 @@ Solution for pallet detection and pallet-ground segmentation in a manufacturing 
 
 - **Published Topics**:
   
-  - `/pallet_detection` (sensor_msgs/Image with bounding boxes)
-  - `/pallet_segmentation` (sensor_msgs/Image with segmented regions)
+  - '/segmentation_inference/overlay_image' (sensor_msgs/Image with bounding boxes)
+  - '/detection_inference/overlay_image' (sensor_msgs/Image with segmented regions)
 
 ### Visualization
+
 - Bounding boxes and segmentation masks are overlaid on the input image and then published. 
 
 ---
@@ -222,53 +230,77 @@ Install **Miniconda** to manage the Python environment. Follow the official inst
 
 ### Environment Setup
 
-0. Create Conda Environment
-This package includes an `environment.yml` file to set up the required Python environment. Run the following commands:
 
-1. Clone this repository into your workspace:
-   ```bash
-   $ mkdir ~/ros2_ws/src && cd ros2_ws/src
-   
-   $ git clone https://github.com/your-repo/peer_robotics_pallet_vision.git
+#### **Step 1: Create a ROS 2 Workspace**
 
-
-2. navigate to package 
-
+Create a ROS 2 workspace and navigate to the `src` directory:
 ```bash
-cd ~/ros2_ws/src/peer_robotics_pallet_vision
+mkdir -p <ros2_ws>/src && cd <ros2_ws>/src
 ```
 
-3. create conda environment
+#### Step 2: Clone the Repository
+
+Clone the Peer Robotics Pallet Vision repository:
 
 ```bash
-conda env create -f environment.yml
+git clone https://github.com/rkulkarni1999/peer_robotics_pallet_vision.git
 ```
-
-If the environment.yml file does not work, manually set up the environment:
-
-```bash
-conda create -n yolo python=3.10.14
-conda activate yolo
-conda install -c conda-forge ultralytics
-```
+Navigate to the package directory:
 
 ```bash
-cd ~/ros2_ws
+cd peer_robotics_pallet_vision
 ```
 
+#### Step 3: Set Up the Environment
+
+Make the setup script executable:
+
 ```bash
-colcon build
+chmod +x setup_env.sh
 ```
+
+Run the setup script:
+
+```bash
+./setup_env.sh
+```
+
+Activate the `yolo_env` Conda environment:
+
+```bash
+conda activate yolo_env
+```
+
+#### Step 4: Build the Workspace
+
+Navigate back to the ROS 2 workspace root:
+
+```bash
+cd <ros2_ws>
+```
+
+Source the ROS 2 workspace:
+
 ```bash
 source install/setup.bash
 ```
 
-```bash
-conda activate yolo
-```
+#### Step 5: Configure Environment Variables
+
+Set the `PYTHONPATH`, `PATH`, and `LD_LIBRARY_PATH` for the Conda environment:
 
 ```bash
-cd src/peer_robotics_pallet_vision
+export PYTHONPATH=$(python3 -c "import site; print(site.getsitepackages()[0])"):$PYTHONPATH
+export PATH=$(python3 -c "import sys; print(':'.join(sys.path))"):$PATH
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+```
+
+#### Step 6: Navigate to the Package
+
+Navigate to the package directory:
+
+```bash
+cd src/peer_robotics_pallet_vision/
 ```
 
 ### Usage
@@ -299,6 +331,12 @@ ros2 launch peer_robotics_pallet_vision pallet_detector.launch.py rgb_topic:=/d4
 ros2 launch peer_robotics_pallet_vision pallet_segmentor.launch.py rgb_topic:=/d455_1_rgb_image depth_topic:=/d455_1_depth_image rosbag:=False
 ```
 
+- Alternatively, everything can be run using a single command after setting `rosbag:=True`
+
+```bash
+ros2 launch peer_robotics_pallet_vision pallet_segmentor.launch.py rgb_topic:=/d455_1_rgb_image depth_topic:=/d455_1_depth_image rosbag:=True
+```
+
 - Ensure that you have placed: 
 
 ```bash
@@ -308,7 +346,10 @@ yolo/models/final/segmentation/segmentation_final.pt
 
 These models are part of the repo. 
 
-#### Training Pipeline
+
+
+
+### Training Pipeline
 
 1. Prepare dataset: 
 
@@ -349,7 +390,7 @@ These models are part of the repo.
 
   - **TensorRT**: For high-performance inference on AGX Orin. Note that implementation using TensorRT API is assumed out of scope for this assignment. 
 
-  - Files for the above can be found in the `yolo/models/final/optimized_models_detection`:
+  - Files for the above can be found in the `yolo/models/final/detection` and ``yolo/models/final/detection``:
 
 - Applied:
 
@@ -357,6 +398,67 @@ These models are part of the repo.
 
   - **Pruning**: Not Applied because the model yolov11n and yolo11n-seg are already small. 
 
+### Dockerized Deployment
 
+#### **Step 1: Build the Docker Container**
 
-### Dockerized Deployment {TODO}
+Navigate to the `docker` directory:
+```bash
+cd docker
+```
+
+Build the Docker image:
+
+```bash
+docker build -t peer2_ws:latest .
+```
+
+#### Step 2: Run the Docker Container
+
+Run the container with GPU support enabled (assuming that gpus are setup on the laptop):
+
+```bash
+docker run --rm -it --gpus all peer2_ws
+```
+
+#### Step 3: Running the ROS 2 Nodes
+
+1. Setting Up the Workspace
+
+```bash
+cd ~/peer_ws
+
+# Activate the Conda environment:
+
+conda activate yolo
+
+source install/setup.bash
+
+cd src/peer_robotics_pallet_vision/
+```
+
+2. Running the Rosbag
+```bash
+ros2 bag play rosbags/internship_assignment_sample_bag --loop
+```
+
+3. Open a New Terminal
+
+Start a new interactive terminal, then set up the environment:
+
+```bash
+conda activate yolo && cd peer_ws && source install/setup.bash && cd src/peer_robotics_pallet_vision/
+```
+
+4. Running the Detector Node
+
+```bash
+python peer_robotics_pallet_vision/nodes/pallet_detector.py
+```
+
+#### Step 4: Pruning the Container After Use
+```bash
+docker rm $(docker ps -aq)
+docker rmi peer_ws
+docker system prune -a
+```

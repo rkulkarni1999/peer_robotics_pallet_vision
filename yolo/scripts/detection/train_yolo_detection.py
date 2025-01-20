@@ -1,18 +1,21 @@
 import argparse
 from ultralytics import YOLO
+import torch
 
 def main(args):
     # Load YOLO model and move it to GPU
     model = YOLO(args.model_path).to("cuda:0")
+    if args.use_fp16:
+        model.half()  
 
     # Train the model
     model.train(
-        data=args.data_path,       # Dataset YAML file
-        imgsz=args.image_size,     # Input image size
-        batch=args.batch_size,     # Batch size
-        epochs=args.epochs,        # Number of epochs
-        device=args.device,        # GPU device to use
-        save_period=args.save_period  # Save model weights every specified epochs
+        data=args.data_path,       
+        imgsz=args.image_size,     
+        batch=args.batch_size,     
+        epochs=args.epochs,        
+        device=args.device,        
+        save_period=args.save_period  
     )
 
     print("Training complete!")
@@ -28,6 +31,7 @@ if __name__ == "__main__":
         help="Path to the YOLO model file."
     )
     
+    # Dataset and training arguments
     parser.add_argument(
         "--data_path",
         type=str,
@@ -61,8 +65,15 @@ if __name__ == "__main__":
     parser.add_argument(
         "--save_period",
         type=int,
-        default=50,
+        default=25,
         help="Save model weights every specified number of epochs."
+    )
+    
+    # Optional FP16 precision argument
+    parser.add_argument(
+        "--use_fp16",
+        action="store_true",
+        help="Use FP16 precision for training."
     )
     
     args = parser.parse_args()
