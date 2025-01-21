@@ -143,9 +143,6 @@ Solution for pallet detection and pallet-ground segmentation in a manufacturing 
   - Mean Precision: 0.9239
   - Mean Recall: 0.9240 
 
-{TODO}
-- **For Optimized Model** (Trained on FP32, then quantized to INT8)
-  - Inference Speed: __ ms  
 
 ---
 ## Results
